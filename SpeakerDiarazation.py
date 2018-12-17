@@ -12,6 +12,7 @@ import pickle
 import imutils
 import av
 import numpy as np
+from imutils import face_utils
 
 
 def findVideos():
@@ -56,7 +57,7 @@ def createEncodings(imagePaths):
 		knownNames.append(name)
 
     # write encodings to pickle file
-    print("[INFO] serializing encodings...")
+    print "serializing encodings..."
     data = {"encodings": knownEncodings, "names": knownNames}
     f = open("/home/valia/Desktop/encodings", "wb")
     f.write(pickle.dumps(data))
@@ -69,8 +70,9 @@ def videoFaceRecognition(data):
 
     print("opening video...")
     
-    vid = av.open('/home/valia/Desktop/all_videos/johnny2.mp4')
- 
+    vid = av.open('/home/valia/Desktop/all_videos/johnnysmall.mp4')
+    #out = cv2.VideoWriter('/home/valia/Desktop/outputVideo.avi	', -1, 20.0, (640,480))
+    print "matching encodings and detecting faces..."
     for packet in vid.demux():
         for frame in packet.decode():
             x = str(type(frame))
@@ -87,6 +89,7 @@ def videoFaceRecognition(data):
                 boxes = face_recognition.face_locations(rgb, model="hog")
                 encodings = face_recognition.face_encodings(rgb, boxes)
                 names = []
+		
         # loop over the facial embeddings
                 for encoding in encodings:
     		# match faces to encodings
@@ -107,10 +110,30 @@ def videoFaceRecognition(data):
     		
     		# maybe maax has to be changed with sth more relaxed
                         names.append(name)
-                print names
+		#print names
+		for ((top, right, bottom, left), name) in zip(boxes, names):
+   		 # rescale the face coordinates
+    		    top = int(top * r)
+	            right = int(right * r)
+	            bottom = int(bottom * r)
+    		    left = int(left * r)
+
+    # draw the predicted face name on the image
+    	    	    cv2.rectangle(arr, (left, top), (right, bottom),	(0, 255, 0), 2)
+    		    y = top - 15 if top - 15 > 15 else top + 15 
+    		    cv2.putText(arr, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+		    cv2.imshow("frame", arr)
+	    	    cv2.waitKey(100)
+		    
+		    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+		    out = cv2.VideoWriter('/home/valia/Desktop/outputVideo.avi',fourcc, 20.0, (arr.shape[1],arr.shape[0])) #ToDo see how to save video
+	# if the writer is not None, write the frame with recognized
+	# faces to disk
+            	    
+    print "finished recognition..."
+    #return names, boxes
     
 
-        
     
 def main():
     videoPaths = findVideos()
@@ -122,7 +145,7 @@ def main():
     createEncodings(imagePaths)
 
     data = pickle.loads(open("/home/valia/Desktop/encodings", "rb").read())
- 
+    #print len(data)
     videoFaceRecognition(data)
 
         
