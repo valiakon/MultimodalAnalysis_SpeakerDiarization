@@ -11,7 +11,7 @@ def video_to_audio(fileName):
     file, file_extension = os.path.splitext(fileName)
     file = pipes.quote(file)
     os.system('ffmpeg -i ' + file + file_extension + ' ' + file + '.wav')
-    os.system('lame ' + file + '.wav' + ' ' + file + '.mp3')
+    # os.system('lame ' + file + '.wav' + ' ' + file + '.mp3')
     
 def main():
     files = os.listdir("/Users/thanasiskaridis/videos_to_audio/")
