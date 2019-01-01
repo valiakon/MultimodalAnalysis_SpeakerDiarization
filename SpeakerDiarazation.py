@@ -70,7 +70,7 @@ def videoFaceRecognition(data):
 
     print("opening video...")
     all_faces_in_video = ["Johnny", "Ellen"]
-    vid = av.open('/home/valia/Desktop/cut1.mp4')
+    vid = av.open('/home/valia/Desktop/obamaSmall.mp4')
     #out = cv2.VideoWriter('/home/valia/Desktop/outputVideo.avi	', -1, 20.0, (640,480))
     print ("matching encodings and detecting faces...")
     for packet in vid.demux():
@@ -135,7 +135,7 @@ def videoFaceRecognition(data):
                     right = int(right * r)
                     bottom = int(bottom * r)
                     left = int(left * r)
-
+		    print name, left, top, right, bottom
     # draw the predicted face name on the image
                     cv2.rectangle(arr, (left, top), (right, bottom),	(0, 255, 0), 2)
                     y = top - 15 if top - 15 > 15 else top + 15 

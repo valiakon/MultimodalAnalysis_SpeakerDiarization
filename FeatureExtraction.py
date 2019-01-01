@@ -21,7 +21,7 @@ def StereoToMono(wavFilePath):
 
 def ExtractFeatures(newPath):
     [fs, x] = audioBasicIO.readAudioFile(newPath)
-    mt_size, mt_step, st_win = 1, 0.1, 0.05
+    mt_size, mt_step, st_win = 1, 1, 0.5
     [mt_feats, st_feats, _] = mT(x, fs, mt_size * fs, mt_step * fs,
                                 round(fs * st_win), round(fs * st_win * 0.5))
     (mt_feats_norm, MEAN, STD) = normalizeFeatures([mt_feats.T])
@@ -32,10 +32,11 @@ def ExtractFeatures(newPath):
 
 def main():
     wavFilePath = "/home/valia/Desktop/megan.wav"
-    mt_size, mt_step, st_win = 1, 0.1, 0.05
+    mt_size, mt_step, st_win = 1, 0.1, 0.5
     newPath = StereoToMono(wavFilePath)
     print newPath
     mt_feats_norm = ExtractFeatures(newPath)
+    print mt_feats_norm.shape
     #arr = np.asarray(F)
     k_means = KMeans(n_clusters=2)
     k_means.fit(mt_feats_norm.T)
@@ -56,5 +57,4 @@ def main():
 
 if __name__== "__main__":
   main()
-
 
