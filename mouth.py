@@ -16,11 +16,12 @@ if __name__ == '__main__':
 
 	fps = cap.get(cv2.CAP_PROP_FPS)
 	times = 0
+	distance = []
 	while True:
-		times += 1
 		ret, image_np = cap.read()
 		FACIAL_LANDMARKS_IDXS = collections.OrderedDict([("mouth", (48, 68))])
 		if not image_np is None:
+			times += 1
 			face_landmarks_list = face_recognition.face_landmarks(image_np)
 			arr = np.asarray(image_np)
 			#print face_landmarks_list
@@ -31,11 +32,11 @@ if __name__ == '__main__':
 			for face_landmarks in face_landmarks_list:
 				speaker_number += 1
 				#print len(face_landmarks['top_lip'])
-				new_image.line(face_landmarks['top_lip'], fill=(0, 255, 0), width=5)
-				new_image.line(face_landmarks['bottom_lip'], fill=(0, 255, 0), width=5)
+				new_image.line(face_landmarks['top_lip'], fill=(0, 255, 0), width=2)
+				new_image.line(face_landmarks['bottom_lip'], fill=(0, 255, 0), width=2)
 				speakers_lips.append([face_landmarks['top_lip'], face_landmarks['bottom_lip']])
-			print (speakers_lips)
-
+			print len(speakers_lips)
+			
 			if len(speakers_lips) > 1:
 				for i, x in enumerate(speakers_lips):
 					print speakers_lips[i][0]
@@ -45,7 +46,28 @@ if __name__ == '__main__':
 							temp = speakers_lips[i+1]
 							speakers_lips[i] = speakers_lips[i+1]
 							speakers_lips[i+1] = temp
-
+			
+			if times != 1:
+				print 'times', times
+				if len(speakers_lips) >= 1:
+					dist = 0
+					pr_dist = 0
+					for k in range (len(speakers_lips)):
+						distance[k] = []
+						for j in range(2, 10):
+							diff = abs(speakers_lips[k][0][j][1] - speakers_lips[k][1][j][1])
+							dist = dist + diff
+							pr_diff = abs(pr_speakers_lips[k][0][j][1] - pr_speakers_lips[k][1][j][1])
+							pr_dist = pr_dist + pr_diff
+						distance[k].append(abs(dist - pr_dist))
+			pr_speakers_lips = speakers_lips
+			print distance
+			if len(distance):
+				for i in range(len(distance)):
+					pass
+			
+			if times % (fps + 1) == 0:
+				distance = []
 			print speakers_lips
 			pix = np.array(pil_image)
 			pix = cv2.cvtColor(pix, cv2.COLOR_RGBA2RGB)
