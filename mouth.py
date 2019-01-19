@@ -35,33 +35,45 @@ if __name__ == '__main__':
 				new_image.line(face_landmarks['top_lip'], fill=(0, 255, 0), width=2)
 				new_image.line(face_landmarks['bottom_lip'], fill=(0, 255, 0), width=2)
 				speakers_lips.append([face_landmarks['top_lip'], face_landmarks['bottom_lip']])
-			print len(speakers_lips)
+			#print len(speakers_lips)
 			
 			if len(speakers_lips) > 1:
 				for i, x in enumerate(speakers_lips):
-					print speakers_lips[i][0]
+					#print speakers_lips[i][0]
 					if speakers_lips[i] != speakers_lips[-1]:					
 						if speakers_lips[i][0][0] > speakers_lips[i+1][0][0]:
-							print speakers_lips[i][0][0]
+							#print speakers_lips[i][0][0]
 							temp = speakers_lips[i+1]
 							speakers_lips[i] = speakers_lips[i+1]
 							speakers_lips[i+1] = temp
+
+			print speakers_lips
 			
-			if times != 1:
+			if times != 1 and (len(pr_speakers_lips) == len(speakers_lips)):
 				print 'times', times
 				if len(speakers_lips) >= 1:
-					dist = 0
 					pr_dist = 0
+					dist_temp = []
+					print len(speakers_lips)
 					for k in range (len(speakers_lips)):
-						distance[k] = []
+						dist = 0
 						for j in range(2, 10):
 							diff = abs(speakers_lips[k][0][j][1] - speakers_lips[k][1][j][1])
 							dist = dist + diff
 							pr_diff = abs(pr_speakers_lips[k][0][j][1] - pr_speakers_lips[k][1][j][1])
 							pr_dist = pr_dist + pr_diff
-						distance[k].append(abs(dist - pr_dist))
+						dist_temp.append(abs(dist - pr_dist))
+						if k == 1:
+							distance.append(dist_temp)
+							dist_temp = []
+						else:
+							continue
+					if k != 1:
+						distance.append(dist_temp)
+						dist_temp = []						
+			print "final distance", distance
 			pr_speakers_lips = speakers_lips
-			print distance
+			
 			if len(distance):
 				for i in range(len(distance)):
 					pass
