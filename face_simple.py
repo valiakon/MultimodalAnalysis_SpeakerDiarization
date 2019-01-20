@@ -11,11 +11,17 @@ import numpy as np
 import pandas as pd
 import csv
 
-def clustering(features):
-	
-	#kmeans = KMeans(n_clusters=2, random_state=0).fit(features)
-	df = pd.DataFrame(data=features)
-	print df
+
+def write_csv(features):
+	feat_to_csv_final = []
+	with open('visual_features_HOG.csv', 'a') as feat:
+		wr = csv.writer(feat, delimiter=',')
+		for i in features:
+			feat_to_csv = []
+			print i[0]
+			for j in range(len(i[0])):
+				feat_to_csv.append(i[0][j])
+			wr.writerow(feat_to_csv)
 
 
 if __name__ == '__main__':
@@ -45,14 +51,13 @@ if __name__ == '__main__':
 			else:
 				next_time = length
 			if not image_np is None:
-				print "it is the", times, "frame to process"
+				print "processing the", times, "frame"
 				image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = imutils.resize(image_np, width=750)
 				r = image_np.shape[1] / float(rgb.shape[1])
-				#print "shape", image_np.shape
-				boxes = face_recognition.face_locations(rgb, model="hog", number_of_times_to_upsample=2)
-				print "boxes", boxes
+				boxes = face_recognition.face_locations(rgb, model="cnn", number_of_times_to_upsample=2)
+				#print "boxes", boxes
 				box_num = len(boxes)
 				faces_feat = []
 				for (top, right, bottom, left) in boxes:
@@ -66,19 +71,27 @@ if __name__ == '__main__':
 					crop_img = cv2.resize(crop_img, dsize=(100,100))
 					crop_img = cv2.cvtColor(crop_img, cv2.COLOR_RGB2BGR)
 					cv2.imshow("cropped", crop_img)						
-					f, fn = vs.getRGBS(crop_img)
+					f, fn = vs.getHOG(crop_img)
 					faces_feat.append(f)
-					#print len(faces_feat)
+				#print len(faces_feat[0])
 				if len(faces_feat) == 1:
-						faces_feat.append(np.full((96), -1))
-				final_faces_feat.append([faces_feat])
-				#print len(final_faces_feat)
+					x = faces_feat[0]
+					final_faces_feat.append([x])
+					print "faces", x
+				else:
+					for i in range(len(faces_feat)):
+						if i == 0:
+							x = faces_feat[i]
+						else:
+							x = x + faces_feat[i]
+					print "x", x	
+					final_faces_feat.append([x])
 					
 				facesInFrame.append(len(boxes))
 
 				image_np = cv2.resize(image_np, dsize=(350,200))
 				new_image = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
-				cv2.imshow('Mouth Detection', new_image)
+				cv2.imshow('Face Detection', new_image)
 
 			else:
 				break
@@ -86,8 +99,5 @@ if __name__ == '__main__':
 			if cv2.waitKey(40) & 0xFF == ord('q'):
 				cv2.destroyAllWindows()
 				break
-	#print len(final_faces_feat)
-	#print (final_faces_feat)
-	with open('visual_features.csv', mode='w') as visual_features:
-		visual_features = csv.writer(final_faces_feat, delimiter=',')
-	clustering(final_faces_feat)
+
+	write_csv(final_faces_feat)
