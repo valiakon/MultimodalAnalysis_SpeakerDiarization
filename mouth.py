@@ -1,4 +1,4 @@
-import cv2
+﻿import cv2
 from imutils import face_utils
 import face_recognition
 import imutils
@@ -10,7 +10,7 @@ import numpy as np
 
 if __name__ == '__main__':
 
-	cap = cv2.VideoCapture('/home/valia/Desktop/videos/obama22.mp4')
+	cap = cv2.VideoCapture('/Users/thanasiskaridis/Desktop/multimodal_/videos/clinton18.mp4')
 	#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 	#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 180)
 
@@ -20,8 +20,8 @@ if __name__ == '__main__':
 	while True:
 		ret, image_np = cap.read()
 		FACIAL_LANDMARKS_IDXS = collections.OrderedDict([("mouth", (48, 68))])
+		times += 1
 		if not image_np is None:
-			times += 1
 			face_landmarks_list = face_recognition.face_landmarks(image_np)
 			arr = np.asarray(image_np)
 			#print face_landmarks_list
@@ -47,14 +47,15 @@ if __name__ == '__main__':
 							speakers_lips[i] = speakers_lips[i+1]
 							speakers_lips[i+1] = temp
 
-			print speakers_lips
+			print (speakers_lips)
+			print ('\n')
 			
 			if times != 1 and (len(pr_speakers_lips) == len(speakers_lips)):
-				print 'times', times
+				print ('times', times)
 				if len(speakers_lips) >= 1:
 					pr_dist = 0
 					dist_temp = []
-					print len(speakers_lips)
+					# print (len(speakers_lips))
 					for k in range (len(speakers_lips)):
 						dist = 0
 						for j in range(2, 10):
@@ -63,24 +64,22 @@ if __name__ == '__main__':
 							pr_diff = abs(pr_speakers_lips[k][0][j][1] - pr_speakers_lips[k][1][j][1])
 							pr_dist = pr_dist + pr_diff
 						dist_temp.append(abs(dist - pr_dist))
-						if k == 1:
+						if len(speakers_lips) == 1:
+							dist_temp.append(0)
 							distance.append(dist_temp)
 							dist_temp = []
 						else:
 							continue
-					if k != 1:
+					if len(speakers_lips) != 1:
 						distance.append(dist_temp)
 						dist_temp = []						
-			print "final distance", distance
+			# print ("final distance", distance)
+			# print ('\n')
 			pr_speakers_lips = speakers_lips
 			
-			if len(distance):
-				for i in range(len(distance)):
-					pass
-			
-			if times % (fps + 1) == 0:
+			if times % (fps) == 0:
 				distance = []
-			print speakers_lips
+			# print (speakers_lips)
 			pix = np.array(pil_image)
 			pix = cv2.cvtColor(pix, cv2.COLOR_RGBA2RGB)
 			pix = cv2.resize(pix, dsize=(750,500))
@@ -88,8 +87,32 @@ if __name__ == '__main__':
 			cv2.waitKey(10)
 		else:
 			break
-		
+		# for lt in range(loop_times):
+		# 	for j in (a,b):
 		if cv2.waitKey(40) & 0xFF == ord('q'):
 			cv2.destroyAllWindows()
 			break
-	
+	a = 0
+	b= 22
+	sum_1 = 0 
+	sum_2 = 0
+	count = 0
+	final_list = []
+	# print (distance)
+	print ('distance', len(distance))
+	while(b<=len(distance)):
+		for i in range(a,b):	
+			sum_1 = sum_1 + distance[i][0]
+			sum_2 = sum_2 + distance[i][1]
+		final_list.append((sum_1, sum_2))
+		sum_1 = 0
+		sum_2 = 0
+		a += 23
+		b += 23
+		if b>len(distance) and count == 0:
+			b = len(distance)
+			count += 1
+	print (final_list, len(final_list))
+
+
+
