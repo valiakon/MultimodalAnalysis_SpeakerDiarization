@@ -11,14 +11,12 @@ import numpy as np
 if __name__ == '__main__':
 
 	cap = cv2.VideoCapture('/home/valia/Desktop/videos/obama22.mp4')
-	#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
-	#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 180)
 
 	fps = cap.get(cv2.CAP_PROP_FPS)
 	times = 0
 	distance = []
 	final_list = []
-	fps_median = int(fps)/2
+	fps_median = int((fps)/2)
 	next_time = fps_median
 	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 	print "length", length
@@ -26,9 +24,7 @@ if __name__ == '__main__':
 		ret, image_np = cap.read()
 		FACIAL_LANDMARKS_IDXS = collections.OrderedDict([("mouth", (48, 68))])
 		times += 1
-		print "in whileeeeeeee"
 		if not image_np is None:
-			print "it is imageeeeeeeeeeeeeee"
 			face_landmarks_list = face_recognition.face_landmarks(image_np)
 			arr = np.asarray(image_np)
 			#print face_landmarks_list

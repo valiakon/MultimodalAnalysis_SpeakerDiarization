@@ -36,7 +36,7 @@ if __name__ == '__main__':
 	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 	print( length )
 	print 'fps = ', fps
-	fps_median = int(fps)/2
+	fps_median = int((fps)/2)
 	print fps_median 
 	facesInFrame = []
 	final_faces_feat = []
