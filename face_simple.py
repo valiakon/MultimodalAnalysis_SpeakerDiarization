@@ -9,6 +9,7 @@ import visual_features
 from sklearn.cluster import KMeans
 import numpy as np
 import pandas as pd
+import csv
 
 def clustering(features):
 	
@@ -35,7 +36,7 @@ if __name__ == '__main__':
 	next_time = fps_median
 	while True:
 		times +=1
-		#print times
+		print times
 		ret, image_np = cap.read()
 		if (times == next_time):
 			if next_time < length:			
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 			else:
 				next_time = length
 			if not image_np is None:
-				print times
+				print "it is the", times, "frame to process"
 				image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = imutils.resize(image_np, width=750)
@@ -85,6 +86,8 @@ if __name__ == '__main__':
 			if cv2.waitKey(40) & 0xFF == ord('q'):
 				cv2.destroyAllWindows()
 				break
-	print len(final_faces_feat)
-	print (final_faces_feat)
+	#print len(final_faces_feat)
+	#print (final_faces_feat)
+	with open('visual_features.csv', mode='w') as visual_features:
+		visual_features = csv.writer(final_faces_feat, delimiter=',')
 	clustering(final_faces_feat)

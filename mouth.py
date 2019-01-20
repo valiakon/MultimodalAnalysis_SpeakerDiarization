@@ -10,18 +10,25 @@ import numpy as np
 
 if __name__ == '__main__':
 
-	cap = cv2.VideoCapture('/Users/thanasiskaridis/Desktop/multimodal_/videos/clinton18.mp4')
+	cap = cv2.VideoCapture('/home/valia/Desktop/videos/obama22.mp4')
 	#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 	#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 180)
 
 	fps = cap.get(cv2.CAP_PROP_FPS)
 	times = 0
 	distance = []
+	final_list = []
+	fps_median = int(fps)/2
+	next_time = fps_median
+	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+	print "length", length
 	while True:
 		ret, image_np = cap.read()
 		FACIAL_LANDMARKS_IDXS = collections.OrderedDict([("mouth", (48, 68))])
 		times += 1
+		print "in whileeeeeeee"
 		if not image_np is None:
+			print "it is imageeeeeeeeeeeeeee"
 			face_landmarks_list = face_recognition.face_landmarks(image_np)
 			arr = np.asarray(image_np)
 			#print face_landmarks_list
@@ -47,11 +54,10 @@ if __name__ == '__main__':
 							speakers_lips[i] = speakers_lips[i+1]
 							speakers_lips[i+1] = temp
 
-			print (speakers_lips)
-			print ('\n')
-			
+			#print (speakers_lips)
+			#print ('\n')
+			print ('times', times)
 			if times != 1 and (len(pr_speakers_lips) == len(speakers_lips)):
-				print ('times', times)
 				if len(speakers_lips) >= 1:
 					pr_dist = 0
 					dist_temp = []
@@ -77,8 +83,19 @@ if __name__ == '__main__':
 			# print ('\n')
 			pr_speakers_lips = speakers_lips
 			
-			if times % (fps) == 0:
+			if times == next_time:
+				print ('distance', len(distance))
+				sum_1 = 0 
+				sum_2 = 0
+				for i in range(len(distance)):				
+					sum_1 = sum_1 + distance[i][0]
+					sum_2 = sum_2 + distance[i][1]
+				final_list.append((sum_1, sum_2))
 				distance = []
+				next_time = times + int(fps + 1)
+				if next_time > length:
+					next_time = length
+				print next_time
 			# print (speakers_lips)
 			pix = np.array(pil_image)
 			pix = cv2.cvtColor(pix, cv2.COLOR_RGBA2RGB)
@@ -92,26 +109,7 @@ if __name__ == '__main__':
 		if cv2.waitKey(40) & 0xFF == ord('q'):
 			cv2.destroyAllWindows()
 			break
-	a = 0
-	b= 22
-	sum_1 = 0 
-	sum_2 = 0
-	count = 0
-	final_list = []
-	# print (distance)
-	print ('distance', len(distance))
-	while(b<=len(distance)):
-		for i in range(a,b):	
-			sum_1 = sum_1 + distance[i][0]
-			sum_2 = sum_2 + distance[i][1]
-		final_list.append((sum_1, sum_2))
-		sum_1 = 0
-		sum_2 = 0
-		a += 23
-		b += 23
-		if b>len(distance) and count == 0:
-			b = len(distance)
-			count += 1
+
 	print (final_list, len(final_list))
 
 
