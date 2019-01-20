@@ -9,6 +9,7 @@ from pydub import AudioSegment
 import matplotlib.pyplot as plt
 import audioFeatureExtraction as aF
 from audioTrainTest import normalizeFeatures
+from audioSegmentation import speakerDiarization
 from audioFeatureExtraction import mtFeatureExtraction as mT
 
 
@@ -27,6 +28,7 @@ def StereoToMono(wavFilePath):
 
     drive, path_and_file = os.path.splitdrive(wavFilePath)
     path, file_name = os.path.split(path_and_file)
+    print "Processing file:", file_name
     
     sound = AudioSegment.from_wav(wavFilePath)
     sound = sound.set_channels(1)
@@ -54,9 +56,12 @@ def FeaturesFromAllVideos():
     for path in wavs:
         newPath = StereoToMono(path)
         mt_feats_norm = ExtractFeatures(newPath)
-#        mt_feats_normal = mt_feats_norm[4:]
-        for sec_features in mt_feats_norm:
+        mt_feats_normal = mt_feats_norm[:55]
+        for sec_features in mt_feats_normal:
             all_features.append(sec_features)
     all_feats = pd.DataFrame(np.row_stack(all_features))
     return all_feats
+
+
+
 
