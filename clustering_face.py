@@ -7,6 +7,7 @@ if __name__ == '__main__':
 
 
 	feat = pd.read_csv('visual_features_HOG.csv', delimiter=',', header=None)
+	
 	kmeans = KMeans(n_clusters=3, random_state=0).fit_predict(feat)
 	print "kmeans", kmeans
 	

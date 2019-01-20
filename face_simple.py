@@ -14,19 +14,21 @@ import csv
 
 def write_csv(features):
 	feat_to_csv_final = []
+	features = features[:55]
+	print features
 	with open('visual_features_HOG.csv', 'a') as feat:
 		wr = csv.writer(feat, delimiter=',')
 		for i in features:
 			feat_to_csv = []
 			print i[0]
 			for j in range(len(i[0])):
-				feat_to_csv.append(i[0][j])
+				feat_to_csv.append(float('%.5f'%(i[0][j])))
 			wr.writerow(feat_to_csv)
 
 
 if __name__ == '__main__':
 	
-	cap = cv2.VideoCapture('/home/valia/Desktop/videos/obama22.mp4')
+	cap = cv2.VideoCapture('/home/valia/Desktop/megan9.mp4')
 	cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 	cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 180)
 	vs = visual_features.ImageFeatureExtractor()
