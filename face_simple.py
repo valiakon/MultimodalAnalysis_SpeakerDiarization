@@ -15,45 +15,44 @@ import csv
 def write_csv(features):
 	feat_to_csv_final = []
 	features = features[:55]
-	print features
+	#print (features)
 	with open('visual_features_HOG.csv', 'a') as feat:
 		wr = csv.writer(feat, delimiter=',')
 		for i in features:
 			feat_to_csv = []
-			print i[0]
+			#print (i[0])
 			for j in range(len(i[0])):
 				feat_to_csv.append(float('%.5f'%(i[0][j])))
 			wr.writerow(feat_to_csv)
 
 
-if __name__ == '__main__':
-	
-	cap = cv2.VideoCapture('/home/valia/Desktop/videos/clinton2.mp4')
+def face_detection(path, filename):
+	videopath = path + filename
+	cap = cv2.VideoCapture(videopath)
 	cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 	cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 180)
-	#vs = visual_features.ImageFeatureExtractor()
 	fps = cap.get(cv2.CAP_PROP_FPS)
 	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-	print( length )
-	print 'fps = ', fps
+	print( "video for face detection ", length )
+	print ('fps = ', fps)
 	fps_median = int((fps)/2)
-	print fps_median 
+	#print (fps_median )
 	facesInFrame = []
 	final_faces_feat = []
 	times = 0
 	next_time = fps_median
 	while True:
 		times +=1
-		print times
+		#print times
 		ret, image_np = cap.read()
 		if (times == next_time):
 			if next_time < length:			
 				next_time = times + int(fps + 1)
-				print "next_time", next_time
+				#print "next_time", next_time
 			else:
 				next_time = length
 			if not image_np is None:
-				print "processing the", times, "frame"
+				print ("processing the", times, "frame")
 				image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = imutils.resize(image_np, width=750)
@@ -79,14 +78,14 @@ if __name__ == '__main__':
 				if len(faces_feat) == 1:
 					x = faces_feat[0]
 					final_faces_feat.append([x])
-					print "faces", x
+					#print "faces", x
 				else:
 					for i in range(len(faces_feat)):
 						if i == 0:
 							x = faces_feat[i]
 						else:
 							x = x + faces_feat[i]
-					print "x", x	
+					#print "x", x	
 					final_faces_feat.append([x])
 					
 				facesInFrame.append(len(boxes))
@@ -103,3 +102,4 @@ if __name__ == '__main__':
 				break
 
 	write_csv(final_faces_feat)
+	return final_faces_feat

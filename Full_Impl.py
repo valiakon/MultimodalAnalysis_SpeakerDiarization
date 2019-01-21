@@ -26,6 +26,8 @@ from sklearn import manifold
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import KMeans
 from sklearn.cluster import SpectralClustering
+from face_simple import face_detection
+from clustering_face import FaceClustering
 
 def StereoToMono(wavFile):
 
@@ -146,23 +148,12 @@ def SpeeechClustering():
     labels = hc.fit_predict(all_feats)
     return metrics.silhouette_score(all_feats, labels, metric='euclidean')
 
-def FaceClustering():
-
-    feat = pd.read_csv('visual_features_HOG.csv', delimiter=',', header=None)
-#   kmeans = KMeans(n_clusters=3, random_state=0).fit_predict(feat)
-#   print "kmeans", kmeans
-    
-#   agglo =  AgglomerativeClustering(n_clusters = 3,  affinity='euclidean').fit_predict(feat)
-#   print "agglom", agglo
-    spect = SpectralClustering(n_clusters=3, assign_labels="discretize", random_state=0).fit_predict(feat)
-    print "spect", spect
-    return metrics.silhouette_score(feat, spect, metric='euclidean')
-
 def main():
-    path = '/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
+    path = '/home/valia/Desktop/videos'   #'/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
     files = os.listdir(path)
     audio_features = []
     mouth_features = []
+    face_features = []
     for f in files:
         if f[-3:] == "mp4":
             video_to_audio(f)
@@ -173,14 +164,19 @@ def main():
             for sec_features in mt_feats_normal:
                 audio_features.append(sec_features)
             feats = mouthDetection(path, f)      
-            print (feats )
+            print (feats )			
             for sec_features in feats:
                 mouth_features.append(sec_features)
+            face_feat = face_detection(path, f)
+            for sec_features in face_feat:
+                face_features.append(sec_features)
     final_audio_features = pd.DataFrame(np.row_stack(audio_features))
     final_audio_features.to_csv('final_audio_features.csv', sep = ',')
     final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
     final_mouth_features.to_csv('final_mouth_features.csv', sep = ',')
 
+    shil = FaceClustering()
+    print (shil)
 if __name__ == '__main__':
     main()
 
