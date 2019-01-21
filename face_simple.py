@@ -5,7 +5,7 @@ import imutils
 import os
 import pickle
 from collections import OrderedDict
-import visual_features
+from visual import HOG_features
 from sklearn.cluster import KMeans
 import numpy as np
 import pandas as pd
@@ -28,10 +28,10 @@ def write_csv(features):
 
 if __name__ == '__main__':
 	
-	cap = cv2.VideoCapture('/home/valia/Desktop/megan9.mp4')
+	cap = cv2.VideoCapture('/home/valia/Desktop/videos/clinton2.mp4')
 	cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 	cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 180)
-	vs = visual_features.ImageFeatureExtractor()
+	#vs = visual_features.ImageFeatureExtractor()
 	fps = cap.get(cv2.CAP_PROP_FPS)
 	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 	print( length )
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 				rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
 				rgb = imutils.resize(image_np, width=750)
 				r = image_np.shape[1] / float(rgb.shape[1])
-				boxes = face_recognition.face_locations(rgb, model="cnn", number_of_times_to_upsample=2)
+				boxes = face_recognition.face_locations(rgb, model="hog", number_of_times_to_upsample=2)
 				#print "boxes", boxes
 				box_num = len(boxes)
 				faces_feat = []
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 					crop_img = cv2.resize(crop_img, dsize=(100,100))
 					crop_img = cv2.cvtColor(crop_img, cv2.COLOR_RGB2BGR)
 					cv2.imshow("cropped", crop_img)						
-					f, fn = vs.getHOG(crop_img)
+					f, fn = HOG_features(crop_img)
 					faces_feat.append(f)
 				#print len(faces_feat[0])
 				if len(faces_feat) == 1:
