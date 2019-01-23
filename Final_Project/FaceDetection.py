@@ -1,5 +1,4 @@
 # !/usr/bin/env python3
-import csv
 import cv2
 import imutils
 import numpy as np
@@ -9,17 +8,6 @@ from imutils import face_utils
 from PIL import Image, ImageDraw
 from visual import HOG_features
 
-
-def write_csv(features, filename):
-	feat_to_csv_final = []
-	with open(filename, 'a') as feat:
-		wr = csv.writer(feat, delimiter=',')
-		for i in features:
-			feat_to_csv = []
-			print i[0]
-			for j in range(len(i[0])):
-				feat_to_csv.append(float('%.5f'%(i[0][j])))
-			wr.writerow(feat_to_csv)
 
 def face_detection(path, filename):
 	videopath = path + filename
