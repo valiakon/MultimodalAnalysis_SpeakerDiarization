@@ -1,4 +1,4 @@
-# !/usr/bin/env python3
+﻿# !/usr/bin/env python3
 import cv2
 import imutils
 import numpy as np
@@ -63,7 +63,7 @@ def face_detection(path, filename):
 					x = faces_feat[0]
 					final_faces_feat.append([x])
 					#print "faces", x
-				else:
+				elif len(faces_feat) > 1:
 					for i in range(len(faces_feat)):
 						if i == 0:
 							x = faces_feat[i]
@@ -71,7 +71,12 @@ def face_detection(path, filename):
 							x = x + faces_feat[i]
 					#print "x", x	
 					final_faces_feat.append([x])
-					
+				else:
+					if (times > 70):
+						x = final_faces_feat[-1]
+					else:
+						x = [0 for i in range(1024)]
+					final_faces_feat.append([x])
 				facesInFrame.append(len(boxes))
 
 				image_np = cv2.resize(image_np, dsize=(350,200))
