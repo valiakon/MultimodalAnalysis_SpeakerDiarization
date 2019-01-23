@@ -160,23 +160,22 @@ def main():
             wavFile = f[:-3]+'wav' 
             monoWav = StereoToMono(wavFile)
             mt_feats_normal = ExtractFeatures(monoWav)
-            writeToCsv(audio_features, mt_feats_normal)
             for sec_features in mt_feats_normal:
                 audio_features.append(sec_features)
-            feats = mouthDetection(path, f)      
-            print (feats )			
-            for sec_features in feats:
+            mouth_feats = mouthDetection(path, f)      
+#            print (mouth_feats)			
+            for sec_features in mouth_feats:
                 mouth_features.append(sec_features)
-            face_feat = face_detection(path, f)
-            for sec_features in face_feat:
+            face_feats = face_detection(path, f)
+            for sec_features in face_feats:
                 face_features.append(sec_features)
     final_audio_features = pd.DataFrame(np.row_stack(audio_features))
     final_audio_features.to_csv('final_audio_features.csv', sep = ',')
     final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
     final_mouth_features.to_csv('final_mouth_features.csv', sep = ',')
+    final_face_features = pd.DataFrame(np.row_stack(face_features))
+    final_face_features.to_csv('final_face_features.csv', sep = ',')
 
-    shil = FaceClustering()
-    print (shil)
 if __name__ == '__main__':
     main()
 

@@ -101,5 +101,5 @@ def face_detection(path, filename):
 				cv2.destroyAllWindows()
 				break
 
-	write_csv(final_faces_feat)
-	return final_faces_feat
+#	write_csv(final_faces_feat)
+	return final_faces_feat[:55]
