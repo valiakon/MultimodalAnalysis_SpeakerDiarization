@@ -8,10 +8,10 @@ from SpeechFeatures import StereoToMono
 from SpeechFeatures import ExtractFeatures
 from MouthDetection import mouthDetection
 from FaceDetection import face_detection
-
+from FaceDetection import write_csv
 
 def main():
-    path = '/home/eleni/Desktop/Multimodal'   #'/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
+    path = '/home/valia/Desktop/videos1/'   #'/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
     files = os.listdir(path)
     audio_features = []
     mouth_features = []
@@ -35,8 +35,8 @@ def main():
     final_audio_features.to_csv('final_audio_features.csv', sep = ',', mode= 'a', header=None, index=False)
     final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
     final_mouth_features.to_csv('final_mouth_features.csv', sep = ',', mode= 'a', header=None, index=False)
-    final_face_features = pd.DataFrame(np.row_stack(face_features))
-    final_face_features.to_csv('final_face_features.csv', sep = ',', mode= 'a', header=None, index=False)
+    write_csv(face_features, 'final_face_features.csv')
+    #print final_face_features
 
 if __name__ == '__main__':
     main()
