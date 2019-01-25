@@ -26,11 +26,13 @@ def write_csv(features, filename):
 def main():
     path = '/home/valia/Desktop/videos1/'   #'/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
     files = os.listdir(path)
-    audio_features = []
-    mouth_features = []
-    face_features = []
+    file_order = []
     for f in files:
         if f[-3:] == "mp4":
+            file_order.append(f)
+            audio_features = []
+            mouth_features = []
+            face_features = []
             video_to_audio(f)
             wavFile = f[:-3]+'wav' 
             monoWav = StereoToMono(wavFile)
@@ -44,13 +46,13 @@ def main():
             face_feats = face_detection(path, f)
             for sec_features in face_feats:
                 face_features.append(sec_features)
-    final_audio_features = pd.DataFrame(np.row_stack(audio_features))
-	final_audio_features = final_audio_features.round(5)
-    final_audio_features.to_csv('final_audio_features.csv', sep = ',', mode= 'a', header=None, index=False)
-    final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
-    final_mouth_features.to_csv('final_mouth_features.csv', sep = ',', mode= 'a', header=None, index=False)
-    write_csv(face_features, 'final_face_features.csv')
-    #print final_face_features
+        final_audio_features = pd.DataFrame(np.row_stack(audio_features))
+	    final_audio_features = final_audio_features.round(5)
+        final_audio_features.to_csv('final_audio_features.csv', sep = ',', mode= 'a', header=None, index=False)
+        final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
+        final_mouth_features.to_csv('final_mouth_features.csv', sep = ',', mode= 'a', header=None, index=False)
+        write_csv(face_features, 'final_face_features.csv')
+#        print final_face_features
 
 if __name__ == '__main__':
     main()
