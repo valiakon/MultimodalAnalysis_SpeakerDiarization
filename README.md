@@ -19,7 +19,7 @@ The project tries to solve the problem of "who speaks when" in a video file. It 
 #### Step 1
 
 Firstly, we create a dataset containing videos of interviews. Usually, in the expirements two persons participated in each video but the project works for more persons, even though with lower accuracy results.  
-TO seperate the video from the audio segments, ffmpeg library is used. It creates wav files in order to be processed later for audio speaker Diarazation.
+To seperate the video from the audio segments, ffmpeg library is used. It creates wav files in order to be processed later for audio speaker Diarazation.
 
 #### Step 2
 
