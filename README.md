@@ -1,5 +1,5 @@
 # MultimodalAnalysis_SpeakerDiarization
-## Semi-supervised Mthod
+## Semi-supervised Method
 
 
 ### Speaker Diarization
