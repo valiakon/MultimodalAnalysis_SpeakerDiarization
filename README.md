@@ -4,7 +4,7 @@
 
 ### Speaker Diarization
 
-The project tries to solve the problem of "who speaks when" in a video file. A semi-supervised method is implemented. Speaker Diarization is a challenging problem because audio and image have to be combined to result in better accuracy, when usually the number of persons participating is unknown. Additionally, other problems it has to face are that two or more persons could speak at the same time and both noise and background music would be a "part" of the discussion.
+The project tries to solve the problem of "who speaks when" in a video file. A semi-supervised method is implemented. Speaker Diarization is a challenging problem because both audio and image have to be combined to result in better accuracy, when usually the number of persons participating is unknown. Additionally, an other problems would be that two or more persons could speak at the same time and both noise and background music would be a "part" of the discussion.
 
 
 ### Algorithm Steps
@@ -12,7 +12,7 @@ The project tries to solve the problem of "who speaks when" in a video file. A s
 1. Create dataset and Seperate video from audio
 2. Extract audio features from wav files
 3. Perform lip tracking on video frames
-4. Perform face detection and extract HOG features from images presenting only face
+4. Perform face detection using CNN Model and extract HOG features from images presenting only face
 5. Clustering with k-means algorithm using audio features, video features(face, mouth) combined and seperately
 6. Clustering of the above clusters for evaluation
 
@@ -27,7 +27,7 @@ Using the pyAudioAnalysis library we extract feature vectors for each second of 
 
 #### Step 3
 
-The third step is to perform a lip tracking procedure. This could be challenging becuse lips detection is not always successful regarding to the tendency of the face. By using the facial landamarks detector of the face recognition library we detect top and bottom lips coordinates for each person participating in a frame. We then compute the distance of the tom lip from the bottom lip and end up summing the distances for the frames of each second. This procedure assumes that if the distance between the lips succeed a high summary number it will be translated to "the person is speaking during this second". Also, if two persons appear in the same frames it is easier to result in "who is actually talking".
+The third step is to perform a lip tracking procedure. This could be challenging becuse lip detection is not always successful regarding to the tendency of the face. By using the facial landamarks detector of the face recognition library we detect top and bottom lips coordinates for each person participating in a frame. We then compute the distance of the top lip from the bottom lip and end up summing the distances for the frames of each second. This procedure assumes that if the distance between the lips succeed a high summary number it will be translated to "the person is speaking during this second". Also, if two persons appear in the same frames it is easier to result in "who is actually talking".
 
 #### Step 4
 
@@ -40,4 +40,4 @@ As the method used is semi-supervised we select a k+1 number for k-means. We sel
 
 #### Step 6
 
-In order to evaluate the above clustering we calculate the centroids of each clusters extracted in step 5. The next step is to perform a new k-means clustering on the aforementioned centroids. We, conclusively, want to see each step 5'th cluster containig the seconds that a specific person is talking to end up in the same (big) step 6'th cluster. 
+In order to evaluate the above clustering we calculate the centroids of each clusters extracted in step 5. The next step is to perform a new k-means clustering on the aforementioned centroids in order to find the distance between them. We, conclusively, want to see each step 5'th cluster containig the seconds that a specific person is talking to end up in the same (big) step 6'th cluster. 
