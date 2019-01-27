@@ -40,4 +40,4 @@ As the method used is semi-supervised we select a k+1 number for k-means. We sel
 
 #### Step 6
 
-In order to evaluate the above clustering we calculate the centroids of each clusters extracted in step 5. The next step is to perform a new k-means clustering on the aforementioned centroids. We, conclusively, want to see each step 5's cluster containig the seconds that a specific person is talking to end up in the same big step 6'th cluster. 
+In order to evaluate the above clustering we calculate the centroids of each clusters extracted in step 5. The next step is to perform a new k-means clustering on the aforementioned centroids. We, conclusively, want to see each step 5'th cluster containig the seconds that a specific person is talking to end up in the same (big) step 6'th cluster. 
