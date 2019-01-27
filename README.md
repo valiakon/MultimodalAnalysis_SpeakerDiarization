@@ -23,7 +23,7 @@ TO seperate the video from the audio segments, ffmpeg library is used. It create
 
 #### Step 2
 
-Using the pyAudioAnalysis library we extract feature vectors for each second of the video. The aforementioned feature vectors contain mid term features related to Time-domain (Energy), Frequency-domain (Spectral) and Cepstral-domain features (MFCCs). For more information about audio features visit gitlink.
+Using the pyAudioAnalysis library we extract feature vectors for each second of the video. The aforementioned feature vectors contain mid term features related to Time-domain (Energy), Frequency-domain (Spectral) and Cepstral-domain features (MFCCs). For more information about audio features visit https://github.com/tyiannak/pyAudioAnalysis/wiki/3.-Feature-Extraction.
 
 #### Step 3
 
