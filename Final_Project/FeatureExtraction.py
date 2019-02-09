@@ -24,34 +24,59 @@ def write_csv(features, filename):
 			wr.writerow(feat_to_csv)
 
 def main():
-    path = '/home/valia/Desktop/videos1/'   #'/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
-    files = os.listdir(path)
-    file_order = []
-    for f in files:
-        if f[-3:] == "mp4":
-            file_order.append(f)
-            audio_features = []
-            mouth_features = []
-            face_features = []
-            video_to_audio(f)
+	path = '/home/valia/Desktop/videos1/'   #'/Users/thanasiskaridis/Desktop/multimodal_/full_videos/'
+	files = os.listdir(path)
+	file_order = []
+	for f in files:
+		if f[-3:] == "mp4":
+			file_order.append(f)
+			audio_features = []
+			mouth_features = []
+			face_features = []
+            video_to_audio(f)			#split audio files from video
             wavFile = f[:-3]+'wav' 
-            monoWav = StereoToMono(wavFile)
+            monoWav = StereoToMono(wavFile)				#tranform stereo to mono
             mt_feats_normal = ExtractFeatures(monoWav)
+
+			'''Extracting audio features, temporal features of mouth tracking and visual features of images containing speaker faces'''
             for sec_features in mt_feats_normal:
                 audio_features.append(sec_features)
             mouth_feats = mouthDetection(path, f)      
 #            print (mouth_feats)			
             for sec_features in mouth_feats:
                 mouth_features.append(sec_features)
-            face_feats = face_detection(path, f)
-            for sec_features in face_feats:
-                face_features.append(sec_features)
-            final_audio_features = pd.DataFrame(np.row_stack(audio_features))
-	        final_audio_features = final_audio_features.round(5)
-            final_audio_features.to_csv('final_audio_features.csv', sep = ',', mode= 'a', header=None, index=False)
-            final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
-            final_mouth_features.to_csv('final_mouth_features.csv', sep = ',', mode= 'a', header=None, index=False)
-            write_csv(face_features, 'final_face_features.csv')
+			face_feats = face_detection(path, f)
+			for sec_features in face_feats:
+				face_features.append(sec_features)
+
+			'''three final lists containing the final features for each model, face, mouth and audio'''
+			final_audio_features = pd.DataFrame(np.row_stack(audio_features))
+			final_audio_features = final_audio_features.round(5)
+			final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
+
+			'''Checking if all lists contain the same number of features w.r.t the seconds of the video, 
+			keeping the number of instances of the smallest list if the numbers are different'''
+			if len(final_audio_features) != len(final_mouth_features):
+				if len(final_audio_features) < len(final_mouth_features):
+					final_mouth_features = final_mouth_features[:len(final_audio_features)]
+				else:
+					final_audio_features = final_audio_features[:len(final_mouth_features)]
+			if len(face_features) != len(final_audio_features):
+				if len(face_features) < len(final_audio_features):
+					final_audio_features = final_audio_features[:len(face_features)]
+				else:
+					face_features = face_features[:len(final_audio_features)]
+			
+			if len(face_features) != len(final_mouth_features):
+				if len(face_features) < len(final_mouth_features):
+					final_mouth_features = final_mouth_features[:len(face_features)]
+				else:
+					face_features = face_features[:len(final_mouth_features)]
+
+			'''writing all features lists to csv'''
+			final_audio_features.to_csv('final_audio_features.csv', sep = ',', mode= 'a', header=None, index=False)
+			final_mouth_features.to_csv('final_mouth_features.csv', sep = ',', mode= 'a', header=None, index=False)
+			write_csv(face_features, 'final_face_features.csv')
 #           print final_face_features
    
 if __name__ == '__main__':
