@@ -27,6 +27,7 @@ def sum_distance(distance, final_list):
 	for i in range(len(distance)):              
 		sum_1 = sum_1 + distance[i][0]
 		sum_2 = sum_2 + distance[i][1]
+	print sum_1, sum_2
 	final_list.append((sum_1, sum_2))
 	return final_list
 
@@ -59,17 +60,17 @@ def calculate_distance(pr_speakers_lips, speakers_lips, distance):
 '''Detecting top and bottom lips in each frame. Calculate temporal features by calculating the sum of 
 distances between top and bottom lip for every second'''       
 def mouthDetection(path, fileName):
-
 	videoPath = path + fileName
-	#print (videoPath)
 	cap = cv2.VideoCapture(videoPath)
 	fps = cap.get(cv2.CAP_PROP_FPS)
+	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 	times = 0
 	distance = []
 	final_list = []
-	fps_median = int((fps)/2)
-	next_time = fps_median
-	length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+	#fps_median = int((fps)/2)
+	next_time = int(fps)
+	print (fps)
+
 	while True:
 		ret, image_np = cap.read()
 		times += 1
@@ -81,11 +82,12 @@ def mouthDetection(path, fileName):
 			new_image = ImageDraw.Draw(pil_image, 'RGBA')
 			speaker_number = 0
 			speakers_lips = []
+			'''saving the locations of top and bottom lips for each speaker in the frame'''
 			for face_landmarks in face_landmarks_list:
 				speaker_number += 1
-				'''new_image.line(face_landmarks['top_lip'], fill=(0, 255, 0), width=2)			#draw lips for debugging
-				new_image.line(face_landmarks['bottom_lip'], fill=(0, 255, 0), width=2)'''
 				speakers_lips.append([face_landmarks['top_lip'], face_landmarks['bottom_lip']])
+				new_image.line(face_landmarks['top_lip'], fill=(0, 255, 0), width=2)			#draw lips for debugging
+				new_image.line(face_landmarks['bottom_lip'], fill=(0, 255, 0), width=2)
 
 			if len(speakers_lips) > 1:
 				speakers_lips = sort_speakers(speakers_lips) #sorting speakers from left to right
