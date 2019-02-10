@@ -33,10 +33,10 @@ def main():
 			audio_features = []
 			mouth_features = []
 			face_features = []
-			#video_to_audio(f)			#split audio files from video
-            #wavFile = f[:-3]+'wav' 
-            #monoWav = StereoToMono(wavFile)				#tranform stereo to mono
-            #mt_feats_normal = ExtractFeatures(monoWav)
+			video_to_audio(f)			#split audio files from video
+            wavFile = f[:-3]+'wav' 
+            monoWav = StereoToMono(wavFile)				#tranform stereo to mono
+            mt_feats_normal = ExtractFeatures(monoWav)
 
 			'''Extracting audio features, temporal features of mouth tracking and visual features of images containing speaker faces'''
             #for sec_features in mt_feats_normal:
