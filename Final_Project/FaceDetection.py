@@ -53,7 +53,7 @@ def face_detection(path, filename):
 				rgb = imutils.resize(image_np, width=750)
 				r = image_np.shape[1] / float(rgb.shape[1])
 				''' boxes contains the coordinates of the faces showing in frame'''
-				boxes = face_recognition.face_locations(rgb, model="hog", number_of_times_to_upsample=2)   #select cnn model for accuracy or hog model for speed
+				boxes = face_recognition.face_locations(rgb, model="cnn", number_of_times_to_upsample=2)   #select cnn model for accuracy or hog model for speed
 
 				faces_feat = face_features(boxes, image_np, r)
 				
@@ -86,4 +86,4 @@ def face_detection(path, filename):
 				cv2.destroyAllWindows()
 				break
 
-	return final_faces_feat[:55]			#returning the first 55 features as the model works for 1 minute videos
+	return final_faces_feat
