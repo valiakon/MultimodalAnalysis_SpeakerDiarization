@@ -113,4 +113,4 @@ def mouthDetection(path, fileName):
 			break'''
 
 
-	return final_list
+	return final_list[:55]

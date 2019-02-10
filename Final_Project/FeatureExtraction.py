@@ -55,8 +55,8 @@ def main():
 			final_mouth_features = pd.DataFrame(np.row_stack(mouth_features))
 
 			'''Checking if all lists contain the same number of features w.r.t the seconds of the video, 
-			keeping the number of instances of the smallest list if the numbers are different'''
-			if len(final_audio_features) != len(final_mouth_features):
+			keeping the number of instances of the smallest list if the numbers are different - left for future generalisation for more than 				two speakers'''
+			'''if len(final_audio_features) != len(final_mouth_features):
 				if len(final_audio_features) < len(final_mouth_features):
 					final_mouth_features = final_mouth_features[:len(final_audio_features)]
 				else:
@@ -71,7 +71,7 @@ def main():
 				if len(face_features) < len(final_mouth_features):
 					final_mouth_features = final_mouth_features[:len(face_features)]
 				else:
-					face_features = face_features[:len(final_mouth_features)]
+					face_features = face_features[:len(final_mouth_features)]'''
 
 			'''writing all features lists to csv'''
 			final_audio_features.to_csv(f[:-4]+'-audio.csv', sep = ',', mode= 'a', header=None, index=False)
