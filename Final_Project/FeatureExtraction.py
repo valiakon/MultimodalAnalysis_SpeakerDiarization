@@ -75,10 +75,9 @@ def main():
 					face_features = face_features[:len(final_mouth_features)]
 
 			'''writing all features lists to csv'''
-			final_audio_features.to_csv('final_audio_features.csv', sep = ',', mode= 'a', header=None, index=False)
-			final_mouth_features.to_csv('final_mouth_features.csv', sep = ',', mode= 'a', header=None, index=False)
-			write_csv(face_features, 'final_face_features.csv')
-#           print final_face_features
+			final_audio_features.to_csv(f[:-4]+'-audio.csv', sep = ',', mode= 'a', header=None, index=False)
+			final_mouth_features.to_csv(f[:-4]+'-mouth.csv', sep = ',', mode= 'a', header=None, index=False)
+			write_csv(face_features, f[:-4]+'-face.csv')
    
 if __name__ == '__main__':
     main()
