@@ -18,14 +18,14 @@ def write_csv(features, filename):
 		wr = csv.writer(feat, delimiter=',')
 		for i in features:
 			feat_to_csv = []
-			print i[0]
 			for j in range(len(i[0])):
 				feat_to_csv.append(float('%.5f'%(i[0][j])))
 			wr.writerow(feat_to_csv)
 
 def main():
-	path = './videos1/' 
+	path = './videos/' 
 	files = os.listdir(path)
+	print files
 	file_order = []
 	for f in files:
 		if f[-3:] == "mp4":
@@ -33,16 +33,17 @@ def main():
 			audio_features = []
 			mouth_features = []
 			face_features = []
-			video_to_audio(f)			#split audio files from video
+			filepath = path + f
+			video_to_audio(f, filepath)			#split audio files from video
 			wavFile = f[:-3]+'wav' 
 			monoWav = StereoToMono(wavFile)				#tranform stereo to mono
 			mt_feats_normal = ExtractFeatures(monoWav)
 
 			'''Extracting audio features, temporal features of mouth tracking and visual features of images containing speaker faces'''
-            for sec_features in mt_feats_normal:
-                audio_features.append(sec_features)
+			#for sec_features in mt_feats_normal:
+				#audio_features.append(sec_features)
 			mouth_feats = mouthDetection(path, f)      
-#            print (mouth_feats)			
+			#print (mouth_feats)			
 			for sec_features in mouth_feats:
 				mouth_features.append(sec_features)
 			face_feats = face_detection(path, f)

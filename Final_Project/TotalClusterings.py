@@ -13,8 +13,7 @@ def main():
     path = '/home/eleni/Desktop/Multimodal/Results/'
     files = os.listdir(path)
     for f in files:
-        print f
-        print path+f
+        print (f)
         features = pd.read_csv(path+f, sep = ',', header=None, index_col=False)
 #        print features
         features = features[features.columns[:-2]]
@@ -26,7 +25,7 @@ def main():
 
         kmeans = KMeans(n_clusters=3, random_state=0)
         labels = kmeans.fit_predict(features)
-        print "Sillhouette", metrics.silhouette_score(features, labels, metric='euclidean')
+        print ("Sillhouette", metrics.silhouette_score(features, labels, metric='euclidean'))
         name_list = [f[:-4]+"CL0", f[:-4]+"CL1", f[:-4]+"CL2"]   
         
         indexing = [[i for i, e in enumerate(labels) if e == 0], [i for i, e in enumerate(labels) if e == 1], [i for i, e in enumerate(labels) if e == 2]]

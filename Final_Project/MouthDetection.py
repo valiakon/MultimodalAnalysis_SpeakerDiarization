@@ -27,7 +27,6 @@ def sum_distance(distance, final_list):
 	for i in range(len(distance)):              
 		sum_1 = sum_1 + distance[i][0]
 		sum_2 = sum_2 + distance[i][1]
-	print sum_1, sum_2
 	final_list.append((sum_1, sum_2))
 	return final_list
 
@@ -67,9 +66,7 @@ def mouthDetection(path, fileName):
 	times = 0
 	distance = []
 	final_list = []
-	#fps_median = int((fps)/2)
 	next_time = int(fps)
-	print (fps)
 
 	while True:
 		ret, image_np = cap.read()

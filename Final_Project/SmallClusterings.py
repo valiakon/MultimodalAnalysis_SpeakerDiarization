@@ -73,9 +73,9 @@ def main():
             all_feats = pd.concat([audio_feats, face_feats, mouth_feats], axis=1, ignore_index=True)
             all_sil = clustering(mouth_file[0], all_feats, name_list_all)
             
-            print "Audio Silhouette:", audio_sil
-            print "Visual Silhouette:", visual_sil
-            print "All Silhouette:", all_sil
+            print ("Audio Silhouette:", audio_sil)
+            print ("Visual Silhouette:", visual_sil)
+            print ("All Silhouette:", all_sil)
 
            
 if __name__== "__main__":

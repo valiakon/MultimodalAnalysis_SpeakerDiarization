@@ -10,10 +10,10 @@ from pyAudioAnalysis.audioTrainTest import normalizeFeatures
 from pyAudioAnalysis.audioFeatureExtraction import mtFeatureExtraction as mT
 
 
-def video_to_audio(fileName):
+def video_to_audio(fileName, filepath):
     file, file_extension = os.path.splitext(fileName)
     file = pipes.quote(file)
-    os.system('ffmpeg -i ' + file + file_extension + ' ' + file + '.wav')
+    os.system('ffmpeg -i ' + filepath + ' ' + file + '.wav')
 
 
 def StereoToMono(wavFile):
@@ -25,6 +25,7 @@ def StereoToMono(wavFile):
 
 
 def ExtractFeatures(newPath):
+    print newPath
     [fs, x] = audioBasicIO.readAudioFile(newPath)
     mt_size, mt_step, st_win = 1, 1, 0.5
     [mt_feats, st_feats, _] = mT(x, fs, mt_size * fs, mt_step * fs,
