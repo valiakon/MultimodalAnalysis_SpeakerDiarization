@@ -40,10 +40,9 @@ def main():
 			mt_feats_normal = ExtractFeatures(monoWav)
 
 			'''Extracting audio features, temporal features of mouth tracking and visual features of images containing speaker faces'''
-			#for sec_features in mt_feats_normal:
-				#audio_features.append(sec_features)
-			mouth_feats = mouthDetection(path, f)      
-			#print (mouth_feats)			
+			for sec_features in mt_feats_normal:
+				audio_features.append(sec_features)
+			mouth_feats = mouthDetection(path, f)      	
 			for sec_features in mouth_feats:
 				mouth_features.append(sec_features)
 			face_feats = face_detection(path, f)
