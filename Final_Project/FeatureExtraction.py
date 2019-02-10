@@ -24,7 +24,7 @@ def write_csv(features, filename):
 			wr.writerow(feat_to_csv)
 
 def main():
-	path = './videos1/' 
+	path = './Videos/' 
 	files = os.listdir(path)
 	file_order = []
 	for f in files:
