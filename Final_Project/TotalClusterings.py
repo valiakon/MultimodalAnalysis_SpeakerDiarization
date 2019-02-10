@@ -10,12 +10,10 @@ from sklearn import preprocessing
 
 def main():
     
-    path = '/home/eleni/Desktop/Multimodal/Results/'
+    path = './Run/Partial_Results/'
     files = os.listdir(path)
     for f in files:
-        print (f)
         features = pd.read_csv(path+f, sep = ',', header=None, index_col=False)
-#        print features
         features = features[features.columns[:-2]]
 
         x = features.values
@@ -33,11 +31,11 @@ def main():
         df['Origin'] = name_list
         
         if f[:5] == "audio":
-            df.to_csv('/home/eleni/Desktop/Multimodal/AllResults/super_audio_clustering_results.csv', sep = ',', index=False, header=False)
+            df.to_csv('./Run/Total_Results/super_audio_clustering_results.csv', sep = ',', index=False, header=False)
         elif f[:6] == "visual":
-            df.to_csv('/home/eleni/Desktop/Multimodal/AllResults/super_visual_clustering_results.csv', sep = ',', index=False, header=False)
+            df.to_csv('./Run/Total_Results/super_visual_clustering_results.csv', sep = ',', index=False, header=False)
         else:
-            df.to_csv('/home/eleni/Desktop/Multimodal/AllResults/super_all_clustering_results.csv', sep = ',', index=False, header=False)
+            df.to_csv('./Run/Total_Results/super_all_clustering_results.csv', sep = ',', index=False, header=False)
            
 
  

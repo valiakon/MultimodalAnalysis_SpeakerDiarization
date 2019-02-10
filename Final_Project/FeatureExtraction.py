@@ -23,7 +23,7 @@ def write_csv(features, filename):
 			wr.writerow(feat_to_csv)
 
 def main():
-	path = './videos/' 
+	path = './Videos/' 
 	files = os.listdir(path)
 	print files
 	file_order = []
